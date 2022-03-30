@@ -1,0 +1,365 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 3</title>
+    <style>
+        
+        .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+            
+         .dropbtn:hover, .dropbtn:focus {
+                background-color: #000000;
+         }
+
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            
+         .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+         }
+
+                
+         .dropdown-content a:hover {
+                    background-color: #ddd
+         }
+
+        .show {
+            display: block;
+        }
+
+        #items {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #items td, #items th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #items tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+
+            #items th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+
+        #summary {
+            background-color: #4CAF50;
+        }
+
+        body {
+            text-align: center;
+            background-color: #3498DB;
+        }
+    </style>
+</head>
+<body>
+    <h1>Coffee's Shop</h1>
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Menu</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a href="#" onclick="showTea()">Tea</a>
+            <a href="#" onclick="showCoffee()">Coffee</a>
+            <a href="#" onclick="showPastries()">Pastries</a>
+            <a href="#" onclick="showMerchandises()">Merchandise</a>
+        </div>
+    </div>
+    <br>
+    <table id="items" border="1">
+    </table>
+    <div id="summary">
+        <h2>Cart:</h2>
+        <div id="cart">
+
+        </div>
+        <div id="total">
+            <h2>Total: $0</h2>
+        </div>
+    </div>
+    <script>
+		let teas = [{"img":"images/teas1.jpg", "title":"Green Tea", "desc":"Green tea without sugar added", "cost": 2.99},
+{"img":"images/teas2.jpg", "title": "Chamomile Tea", "desc":"This tea comes from steeping chamomile flowers. You can take it regularly to reduce your migraine problem.", "cost": 1.99},
+{"img":"images/teas3.jpg", "title": "Hibiscus Tea", "desc":"For those of you who love herbal tea, this beverage can certainly be a good option to nourish your body. Hibiscus tea is made from steeping dried hibiscus flowers.", "cost": 4.99},
+{"img":"images/teas4.jpg", "title": "Chai Tea", "desc":"This tea is best consumed in the cold weather or when you do not feel fit. Originally from India, chai tea is also called masala chai, which means spiced tea.", "cost": 3.99},
+{"img":"images/teas5.jpg", "title": "Oolong Tea", "desc": "Oolong is one of the healthiest teas in the world you should try. This type of tea contains an antioxidant called flavonol.", "cost": 1.99},
+{"img":"images/teas6.jpg", "title": "Matcha Tea", "desc": "This tea is made from the leaves of the Camellia sinensis plant. What distinguishes matcha tea from other teas is the planting technique.", "cost": 4.99},
+{"img":"images/teas7.jpg", "title": "Ginger Tea", "desc": "Aside from giving warmth to the body, ginger tea can overcome nausea and promote blood circulation too.", "cost": 1.99},
+{"img":"images/teas8.jpg", "title": "Rooibos Tea", "desc": "It is a type of herbal tea made from the leaf extract of the Aspalathus linearis plant.", "cost": 3.99},
+{"img":"images/teas9.jpg", "title": "Black Tea", "desc": "It is one of the kinds of tea that is popular in the world. Black tea has the highest caffeine levels among other types of tea.", "cost": 2.99},
+{"img":"images/teas10.jpg", "title": "Dandelion Tea", "desc": "This tea has many benefits for the body, including maintaining a healthy liver, losing weight, and relieving flu.", "cost": 1.99}]
+
+let coffees = [{"img":"images/coffees1.jpg", "title":"Affogato", "desc": "Espresso poured on a vanilla ice cream. Served in a cappuccino cup.", "cost": 2.99},
+{"img":"images/coffees2.jpg", "title": "Americano", "desc":"Espresso with added hot water (100–150 ml)", "cost": 1.99},
+{"img":"images/coffees3.jpg", "title": "Caffe Latte", "desc": "A tall, mild 'milk coffee' (about 150-300 ml). ", "cost": 3.99},
+{"img":"images/coffees4.jpg", "title": "Caffe Mocha", "desc": "A caffè latte with chocolate and whipped cream, made by pouring about 2 cl of chocolate sauce into the glass, followed by an espresso shot and steamed milk. ", "cost": 2.99},
+{"img":"images/coffees5.jpg", "title": "Cafe Au Lait", "desc": "French morning coffee. Made by mixing dark roasted filter coffee (often prepared with French Press) and warm milk. Served in a bowl or a large coffee cup.", "cost": 3.99},
+{"img":"images/coffees6.jpg", "title": "Cappuccino", "desc":"A coffee drink consisting of espresso and a milk foam mixture (drink size about 160–240 ml). Served in a cappuccino cup.", "cost": 4.99},
+{"img":"images/coffees7.jpg", "title": "Cold Brew Coffee", "desc": "Cold Brew Coffee is a smooth, cold beverage prepared by brewing freshly ground coffee in cold water. ", "cost": 1.99},
+{"img":"images/coffees8.jpg", "title": "Double Espresso (Doppio)", "desc": "Double portion of espresso in a cappuccino/espresso cup.", "cost": 2.99},
+{"img":"images/coffees9.jpg", "title": "Espresso", "desc": "A short, strong drink (about 30 ml) served in an espresso cup.", "cost": 6.99},
+{"img":"images/coffees10.jpg", "title": "Espresso con Panna", "desc": "A shot of espresso topped with whipped cream. Served in an espresso cup.", "cost": 3.99}]
+
+
+let pastries = [{"img":"images/pastries1.jpg", "title":"Strawberry Cream Cheese", "desc":"They are great for making in the summer when all the fresh fruit is in season too.", "cost": 2.99},
+{"img":"images/pastries2.jpg", "title":"Danish Pastries", "desc":"These Danish pastries are made completely from scratch, taste just like a bakery, and are easier", "cost": 1.99},
+{"img":"images/pastries3.jpg","title":"White Chocolate Mouse", "desc":"For that special pastry-chef touch, these white chocolate mousse pastry shells are drizzled with melted semi-sweet chocolate.", "cost": 3.99},
+{"img":"images/pastries4.jpg","title":"Vanilla Cream Puff", "desc":"These gorgeous puff pastry cups are equally impressive as they are delicious.", "cost": 1.99},
+{"img":"images/pastries5.jpg","title":"Apricot and Vanilla", "desc":"Apricot and vanilla pastries! 3 apricot mumps laid on a pillow of vanilla pastry cream", "cost": 0.99},
+{"img":"images/pastries6.jpg","title":"Cardamom Pear", "desc":"Wow your house guests, impress the in-laws, win at brunch.", "cost": 2.99},
+{"img":"images/pastries7.jpg","title":"Apple Cinnamon", "desc":"The perfect Christmas Morning Breakfast Idea.", "cost": 1.99},
+{"img":"images/pastries8.jpg","title":"Vanilla Caramel", "desc":"A copycat version of the classic Canadian snack cake from Vachon", "cost": 3.99},
+{"img":"images/pastries9.jpg","title":"Apple Rose", "desc":"These Apple Rose Puffed Pastries are a simple yet elegant way to serve a unique dessert.", "cost": 1.99},
+{"img":"images/pastries10.jpg","title":"Spinach and Tofu Ricotta Puff", "desc":"These Spinach and Tofu Ricotta Puff Pastries are flaky, soft, pillowy, and so full of flavor.", "cost": 0.99}];
+
+let merchandises = [{"img":"images/merch1.jpg", "title":"Wood Spoon", "desc":"Set of wooden spoons", "cost": 2.99},
+{"img":"images/merch2.jpg", "title":"Personalized Spoon", "desc": "Spoon personalized for gift", "cost": 4.99},
+{"img":"images/merch3.jpg", "title":"Measure Spoon", "desc": "Set of 4 Measuring Spoons included: 1/4TSP,1/2TSP,1TSP,1TBS", "cost": 10.99},
+{"img":"images/merch4.jpg", "title": "Cat Coffee Mug", "desc": "600ml Cute Cat Ceramics Coffee Mug With Lid Large Capacity Animal Mugs creative ", "cost": 3.99},
+{"img":"images/merch5.jpg", "title": "Coffee Mug with Spoon", "desc": "Glasified Dark Brown Coffee with spoon Ceramic Coffee Mug", "cost": 12.99},
+{"img":"images/merch6.jpg", "title": "Cookie Monster Mug", "desc": "Cookie Monster Mug with Hole for Cookies", "cost": 10.99},
+{"img":"images/merch7.jpg", "title": "Mug and Shirt", "desc": "Coffee Tee for Women Coffee Shirt Coffee Tshirt Coffee Tee", "cost": 15.99},
+{"img":"images/merch8.jpg", "title": "Shirt for Men", "desc": "Shirt for Men different sizes", "cost": 10.99},
+{"img":"images/merch9.jpg", "title": "Shirt for Women", "desc": "Shirt for Women sleeveless", "cost": 5.99},
+{"img":"images/merch10.jpg", "title": "Coffee Decaf", "desc": "White Heron Organic Coffee Decaf", "cost": 12.99}]
+
+
+
+
+
+cart_title = [];
+cart_cost = [];
+total_cost = 0;
+
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+
+}
+
+function createHeading(table) {
+  var heading = document.createElement("tr");
+  var heading_1 = document.createElement("th");
+  var heading_2 = document.createElement("th");
+  var heading_3 = document.createElement("th");
+  var heading_4 = document.createElement("th");
+  var heading_5 = document.createElement("th");
+  heading_1.innerHTML = "Image";
+  heading_2.innerHTML = "Title";
+  heading_3.innerHTML = "Description";
+  heading_4.innerHTML = "Price";
+  heading_5.innerHTML = "Cart";
+  heading.appendChild(heading_1);
+  heading.appendChild(heading_2);
+  heading.appendChild(heading_3);
+  heading.appendChild(heading_4);
+  heading.appendChild(heading_5);
+  table.appendChild(heading);
+}
+
+function showTea() {
+  var table = document.getElementById("items");
+  table.innerHTML = '';
+  createHeading(table);
+
+  for (var i = 0; i < 10; i++) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var img = document.createElement("img");
+    img.src = teas[i]["img"];
+    img.width = "100";
+    img.height = "100";
+    td.appendChild(img);
+    td2.innerHTML = teas[i]["title"];
+    td3.innerHTML = teas[i]["desc"];
+    td4.innerHTML = teas[i]["cost"];
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    var button = document.createElement("button");
+    button.id = i;
+    var t = document.createTextNode("Add to Cart");
+    button.appendChild(t);
+    button.onclick = function() {
+      var p = document.createElement("p");
+      p.innerHTML = teas[this.id]["title"] + " $" + teas[this.id]["cost"];
+      document.getElementById("cart").appendChild(p);
+      total_cost += teas[this.id]["cost"];
+      document.getElementById("total").innerHTML = "<h2> Total: $" + total_cost + "</h2>";
+    }
+    tr.appendChild(button);
+    table.append(tr);
+  }
+}
+
+function showCoffee() {
+  var table = document.getElementById("items");
+  table.innerHTML = '';
+  createHeading(table);
+
+  for (var i = 0; i < 10; i++) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var img = document.createElement("img");
+    img.src = coffees[i]["img"];
+    img.width = "100";
+    img.height = "100";
+    td.appendChild(img);
+    td2.innerHTML = coffees[i]["title"];
+    td3.innerHTML = coffees[i]["desc"];
+    td4.innerHTML = coffees[i]["cost"];
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    var button = document.createElement("button");
+    button.id = i;
+    var t = document.createTextNode("Add to Cart");
+    button.appendChild(t);
+    button.onclick = function() {
+      var p = document.createElement("p");
+      p.innerHTML = coffees[this.id]["title"] + " $" + coffees[this.id]["cost"];
+      document.getElementById("cart").appendChild(p);
+      total_cost += coffees[this.id]["cost"];
+      document.getElementById("total").innerHTML = "<h2> Total: $" + total_cost + "</h2>";
+    }
+    tr.appendChild(button);
+    table.append(tr);
+  }
+}
+
+function showPastries() {
+  var table = document.getElementById("items");
+  table.innerHTML = '';
+  createHeading(table);
+
+  for (var i = 0; i < 10; i++) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var img = document.createElement("img");
+    img.src = pastries[i]["img"];
+    img.width = "100";
+    img.height = "100";
+    td.appendChild(img);
+    td2.innerHTML = pastries[i]["title"];
+    td3.innerHTML = pastries[i]["desc"];
+    td4.innerHTML = pastries[i]["cost"];
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    var button = document.createElement("button");
+    button.id = i;
+    var t = document.createTextNode("Add to Cart");
+    button.appendChild(t);
+    button.onclick = function() {
+      var p = document.createElement("p");
+      p.innerHTML = pastries[this.id]["title"] + " $" + pastries[this.id]["cost"];
+      document.getElementById("cart").appendChild(p);
+      total_cost += pastries[this.id]["cost"];
+      document.getElementById("total").innerHTML = "<h2> Total: $" + total_cost + "</h2>";
+    }
+    tr.appendChild(button);
+    table.append(tr);
+  }
+}
+
+function showMerchandises() {
+  var table = document.getElementById("items");
+  table.innerHTML = '';
+  createHeading(table);
+
+  for (var i = 0; i < 10; i++) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var img = document.createElement("img");
+    img.src = merchandises[i]["img"];
+    img.width = "100";
+    img.height = "100";
+    td.appendChild(img);
+    td2.innerHTML = merchandises[i]["title"];
+    td3.innerHTML = merchandises[i]["desc"];
+    td4.innerHTML = merchandises[i]["cost"];
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    var button = document.createElement("button");
+    button.id = i;
+    var t = document.createTextNode("Add to Cart");
+    button.appendChild(t);
+    button.onclick = function() {
+      var p = document.createElement("p");
+      p.innerHTML = merchandises[this.id]["title"] + " $" + merchandises[this.id]["cost"];
+      document.getElementById("cart").appendChild(p);
+      total_cost += merchandises[this.id]["cost"];
+      document.getElementById("total").innerHTML = "<h2> Total: $" + total_cost + "</h2>";
+    }
+    tr.appendChild(button);
+    table.append(tr);
+  }
+}
+
+
+
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+    </script>
+</body>
+
+</html>
